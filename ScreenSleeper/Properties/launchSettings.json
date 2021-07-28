@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ScreenSleeper": {
+      "commandName": "Project",
+      "commandLineArgs": "/? /delay 10 /idle 1"
+    }
+  }
+}

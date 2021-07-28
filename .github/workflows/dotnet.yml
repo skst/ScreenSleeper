@@ -1,0 +1,145 @@
+name: .NET
+
+#
+# Skip the workflow with one of the following:
+#   [skip ci]
+#   [ci skip]
+#   ***NO_CI***
+#
+# Note that a commit MUST include one of the following to create a release:
+#   #patch
+#   #minor
+#   #major
+#
+
+on:
+  workflow_dispatch:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+
+jobs:
+  build:
+    if: (github.event_name == 'workflow_dispatch') || (!contains(toJson(github.event.commits.*.message), '***NO_CI***') && !contains(toJson(github.event.commits.*.message), '[ci skip]') && !contains(toJson(github.event.commits.*.message), '[skip ci]'))
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # Work around https://github.com/actions/setup-dotnet/issues/155
+      - name: Clean solution
+        run: dotnet clean --configuration Release
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+
+      # https://docs.microsoft.com/en-us/dotnet/core/tools/
+      - name: Build
+        run: dotnet build ScreenSleeper/ScreenSleeper.csproj --nologo --configuration Release --runtime win-x64
+
+      - name: Test
+        run: dotnet test ScreenSleeper.UnitTests/ScreenSleeper.UnitTests.csproj --nologo --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
+
+      - name: Build single-file deployment
+        # Publish to sibling `release` folder for github-tag-action step.
+        run: dotnet publish ScreenSleeper/ScreenSleeper.csproj -p:PublishProfile=FolderProfile -o ../release/
+
+      # Upload release artifact to share with next job
+      # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
+      # https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload deployment folder as a build artifact
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: publish-package
+          path: ./release/
+          retention-days: 1
+        # Use always() to always run this step even when there are failures
+        #if: ${{ always() }}
+
+
+  # Jobs are run in parallel unless `needs` is specified.
+  # https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#creating-dependent-jobs
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      # Download publish artifact from previous job
+      # https://github.com/marketplace/actions/download-a-build-artifact
+      - name: Download deployment folder as a build artifact
+        uses: actions/download-artifact@v2.0.9
+        with:
+          name: publish-package
+          path: ./release/
+
+      # Delete publish artifact so it does not count against storage
+      # https://github.com/marketplace/actions/delete-artifact
+      - name: Delete build artifact
+        uses: GeekyEggo/delete-artifact@v1.0.0
+        with:
+          name: publish-package
+          failOnError: false
+
+      - name: List folder
+        run: |
+          ls -la
+          ls -la ./release/
+
+      # https://github.com/marketplace/actions/github-tag-bump
+      # We want to use the tag without the 'v' prefix for the release name.
+      # The action does not output that, so we perform a dry run to get the tag without 'v'.
+      - name: Get tag without 'v' prefix
+        id: StepTagNoV
+        uses: anothrNick/github-tag-action@1.34.0
+        env:
+          DRY_RUN: true
+          DEFAULT_BUMP: none
+          WITH_V: false
+
+      # https://github.com/marketplace/actions/github-tag-bump
+      - name: Bump version and push tag
+        id: StepBump
+        uses: anothrNick/github-tag-action@1.34.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: none
+          WITH_V: true
+
+      - name: Zip Release folder
+        if: success()
+        working-directory: ./release
+        run: |
+          zip ../ScreenSleeper.zip *
+          cd ..
+          ls -la
+          zipinfo ScreenSleeper.zip
+
+      # (This could be a separate action triggered by pushing a tag.)
+      # https://github.com/marketplace/actions/create-release
+      - name: Create release with artifact
+        if: success() && steps.StepTagNoV.outputs.new_tag && steps.StepBump.outputs.new_tag
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.StepBump.outputs.new_tag }}
+          name: ${{ steps.StepTagNoV.outputs.new_tag }}
+          #body: ???
+          # Note: Using "./release/*" uploads the individual files.
+          artifacts: ScreenSleeper.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
