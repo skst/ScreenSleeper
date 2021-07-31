@@ -55,8 +55,8 @@ jobs:
         run: dotnet test ScreenSleeper.UnitTests/ScreenSleeper.UnitTests.csproj --nologo --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
 
       - name: Build single-file deployment
-        # Publish to sibling `release` folder for github-tag-action step.
-        run: dotnet publish ScreenSleeper/ScreenSleeper.csproj -p:PublishProfile=FolderProfile -o ../release/
+        # Publish to `release` folder for github-tag-action step.
+        run: dotnet publish ScreenSleeper/ScreenSleeper.csproj -p:PublishProfile=FolderProfile -o ./release/
 
       # Upload release artifact to share with next job
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
