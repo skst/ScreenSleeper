@@ -46,7 +46,7 @@ namespace ScreenSleeper
 
 			bool bLock = (cmdline["lock"] is not null);
 			uint minutesIdle = cmdline["idle"]?.ValueAsUInt() ?? 0;
-			var delayIdle = TimeSpan.FromSeconds(minutesIdle);
+			var delayIdle = TimeSpan.FromMinutes(minutesIdle);
 			uint secondsDelay = cmdline["delay"]?.ValueAsUInt() ?? 1;
 			var delay = TimeSpan.FromSeconds(secondsDelay);
 			uint secondsStandby = cmdline["standby"]?.ValueAsUInt() ?? 0;
