@@ -38,14 +38,14 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
-      # Work around https://github.com/actions/setup-dotnet/issues/155
-      - name: Clean solution
-        run: dotnet clean --configuration Release
-
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
+
+      # Work around https://github.com/actions/setup-dotnet/issues/155
+      - name: Clean solution
+        run: dotnet clean --configuration Release
 
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
