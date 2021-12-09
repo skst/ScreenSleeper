@@ -52,7 +52,7 @@ jobs:
         run: dotnet build ScreenSleeper/ScreenSleeper.csproj --nologo --self-contained --configuration Release --runtime win-x64
 
       - name: Test
-        run: dotnet test ScreenSleeper.UnitTests/ScreenSleeper.UnitTests.csproj --nologo --self-contained --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
+        run: dotnet test ScreenSleeper.UnitTests/ScreenSleeper.UnitTests.csproj --nologo --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
 
       - name: Build single-file deployment
         # Publish to `release` folder for github-tag-action step.
