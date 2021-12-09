@@ -45,7 +45,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: 6.0.x
 
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
