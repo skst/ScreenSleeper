@@ -48,6 +48,11 @@ public class Program
 		uint minutesIdle = cmdline["idle"]?.ValueAsUInt() ?? 0;
 		var delayIdle = TimeSpan.FromMinutes(minutesIdle);
 		uint secondsDelay = cmdline["delay"]?.ValueAsUInt() ?? 1;
+		if (secondsDelay == 0)
+		{
+			// Wait at least one second before turning off monitors, so user can stop using HIDs.
+			secondsDelay = 1;
+		}
 		var delay = TimeSpan.FromSeconds(secondsDelay);
 		uint secondsStandby = cmdline["standby"]?.ValueAsUInt() ?? 0;
 		var delayStandby = TimeSpan.FromSeconds(secondsStandby);
