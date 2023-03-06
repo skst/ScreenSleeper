@@ -36,10 +36,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.0.x
 
@@ -62,7 +62,7 @@ jobs:
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload deployment folder as a build artifact
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v3
         with:
           name: publish-package
           path: ./release/
@@ -79,12 +79,12 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Download publish artifact from previous job
       # https://github.com/marketplace/actions/download-a-build-artifact
       - name: Download deployment folder as a build artifact
-        uses: actions/download-artifact@v2.0.9
+        uses: actions/download-artifact@v3
         with:
           name: publish-package
           path: ./release/
@@ -92,7 +92,7 @@ jobs:
       # Delete publish artifact so it does not count against storage
       # https://github.com/marketplace/actions/delete-artifact
       - name: Delete build artifact
-        uses: GeekyEggo/delete-artifact@v1.0.0
+        uses: GeekyEggo/delete-artifact@v2
         with:
           name: publish-package
           failOnError: false
@@ -107,7 +107,7 @@ jobs:
       # The action does not output that, so we perform a dry run to get the tag without 'v'.
       - name: Get tag without 'v' prefix
         id: StepTagNoV
-        uses: anothrNick/github-tag-action@1.34.0
+        uses: anothrNick/github-tag-action@1.61.0
         env:
           DRY_RUN: true
           DEFAULT_BUMP: none
@@ -116,7 +116,7 @@ jobs:
       # https://github.com/marketplace/actions/github-tag-bump
       - name: Bump version and push tag
         id: StepBump
-        uses: anothrNick/github-tag-action@1.34.0
+        uses: anothrNick/github-tag-action@1.61.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: none
@@ -135,7 +135,7 @@ jobs:
       # https://github.com/marketplace/actions/create-release
       - name: Create release with artifact
         if: success() && steps.StepTagNoV.outputs.new_tag && steps.StepBump.outputs.new_tag
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.12.0
         with:
           tag: ${{ steps.StepBump.outputs.new_tag }}
           name: ${{ steps.StepTagNoV.outputs.new_tag }}
