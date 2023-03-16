@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationIcon>monitor_screensaver.ico</ApplicationIcon>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
@@ -10,6 +10,7 @@
     <Copyright>(c) 2021-2023 12noon, Stefan K.S. Tucker</Copyright>
     <StartupObject />
     <Platforms>AnyCPU;x64</Platforms>
+	 <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

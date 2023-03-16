@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Shared
@@ -11,11 +10,11 @@ namespace Shared
 	///	[value [value ...]] [[/-]switch [value [value ...]]]
 	/// A switch can have multiple values.
 	/// Values can also be passed before switches.
-	/// 
+	///
 	/// Switches must start with a letter. (This avoids negative numbers
 	/// being seen as switches instead of values.)
 	/// Switches can be case-sensitive or -insensitive.
-	/// 
+	///
 	/// This class parses the passed command line and presents:
 	///	Unnamed values
 	///	Switches without values
