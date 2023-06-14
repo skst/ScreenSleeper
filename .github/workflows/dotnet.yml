@@ -59,11 +59,11 @@ jobs:
 
       # Work around https://github.com/actions/setup-dotnet/issues/155
       - name: Clean solution
-        run: dotnet clean --configuration Release
+        run: dotnet clean --configuration ${{env.BUILD_CONFIGURATION}}
 
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
-        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration Release --runtime win-x64
+        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64
 
       - name: Test
         run: dotnet test ${{env.SOLUTION_TESTS_FILE_PATH}} --nologo --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
@@ -124,6 +124,7 @@ jobs:
 
       - name: Output trimmed version
         run: echo Version=${{ steps.TrimV.outputs.result }}
+        # steps.TrimV.outputs.result replaces steps.StepTagNoV.outputs.new_tag
 
 
   publish:
