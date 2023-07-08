@@ -18,15 +18,17 @@ on:
   push:
     branches: [ master, yaml ]
     paths-ignore:
-      - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes'
+      - '**/*.md'
+      - 'LICENSE'
   pull_request:
     branches: [ master, yaml ]
     paths-ignore:
-      - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes'
+      - '**/*.md'
+      - 'LICENSE'
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -39,6 +41,11 @@ env:
   BUILD_CONFIGURATION: Release
   
   ARTIFACT_NAME: ScreenSleeper
+  ARTIFACT_PACKAGE: package-screensleeper
+
+concurrency:
+  group: screensleeper-${{ github.ref }}-1
+  cancel-in-progress: true
 
 # Jobs are run in parallel unless `needs` is specified.
 # https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#creating-dependent-jobs
@@ -72,13 +79,16 @@ jobs:
         # Publish to `release` folder for github-tag-action step.
         run: dotnet publish ${{env.SOLUTION_FILE_PATH}} -p:PublishProfile=FolderProfile -o ./release/
 
+      - name: Copy Files to Publish
+        run: Copy-Item -Path LICENSE -Destination ./release/
+
       # Upload release artifact to share with next job
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload deployment folder as a build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: publish-package
+          name: ${{env.ARTIFACT_PACKAGE}}
           path: ./release/
           retention-days: 1
         # Use always() to always run this step even when there are failures
@@ -97,6 +107,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
       # https://github.com/marketplace/actions/github-tag-bump
       # We want to use the tag without the 'v' prefix for the release name.
@@ -135,13 +147,15 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
       # Download publish artifact from previous job
       # https://github.com/marketplace/actions/download-a-build-artifact
       - name: Download deployment folder as a build artifact
         uses: actions/download-artifact@v3
         with:
-          name: publish-package
+          name: ${{env.ARTIFACT_PACKAGE}}
           path: ./release/
 
       # Delete publish artifact so it does not count against storage
@@ -149,7 +163,7 @@ jobs:
       - name: Delete build artifact
         uses: GeekyEggo/delete-artifact@v2
         with:
-          name: publish-package
+          name: ${{env.ARTIFACT_PACKAGE}}
           failOnError: false
 
       - name: List folder
@@ -181,8 +195,8 @@ jobs:
         if: success() && needs.version.outputs.TagNoV && steps.StepBump.outputs.new_tag
         uses: ncipollo/release-action@v1.12.0
         with:
-          tag: ${{ steps.StepBump.outputs.new_tag }}
           name: ${{ needs.version.outputs.TagNoV }}
+          tag: ${{ steps.StepBump.outputs.new_tag }}
           #body: ???
           # Note: Using "./release/*" uploads the individual files.
           artifacts: ${{env.ARTIFACT_NAME}}.zip
