@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ApplicationIcon>monitor_screensaver.ico</ApplicationIcon>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
