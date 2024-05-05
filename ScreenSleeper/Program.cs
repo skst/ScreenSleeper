@@ -21,7 +21,7 @@ public class Program
 {
 	static void Main(string[] args)
 	{
-		var cmdline = new CommandLineArguments(args, caseSensitive: false);
+		CommandLineArguments cmdline = new(args, caseSensitive: false);
 
 		if ((cmdline["?"] is not null) || (cmdline["h"] is not null))
 		{

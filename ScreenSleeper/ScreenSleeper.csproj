@@ -10,7 +10,6 @@
     <Copyright>(c) 2021-2023 12noon, Stefan K.S. Tucker</Copyright>
     <StartupObject />
     <Platforms>AnyCPU;x64</Platforms>
-	 <RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	 <PackageReadmeFile>README.md</PackageReadmeFile>
 	 <RepositoryUrl>https://github.com/skst/ScreenSleeper</RepositoryUrl>
 	 <PackageLicenseFile>LICENSE</PackageLicenseFile>
