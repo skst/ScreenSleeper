@@ -69,3 +69,23 @@ Key            | Action
 /delay \<seconds\> | Wait before entering standby (if /standby is specified) or off (Default = 1)
 /standby \<seconds\> | Wait in standby before turning off monitors
 /lock | Lock the computer after turning off monitors
+
+## Reference
+
+https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerpowersettingnotification
+
+https://docs.microsoft.com/en-us/windows/win32/power/wm-powerbroadcast
+
+**WM_POWERBROADCAST**
+https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-powerbroadcast_setting
+
+**POWERBROADCAST_SETTING**
+https://docs.microsoft.com/en-us/windows/win32/power/power-setting-guids
+**GUID_CONSOLE_DISPLAY_STATE**
+
+https://www.codeproject.com/Articles/1193099/Determining-the-Monitors-On-Off-sleep-Status
+
+https://stackoverflow.com/questions/203355/is-there-any-way-to-detect-the-monitor-state-in-windows-on-or-off
+
+https://stackoverflow.com/questions/31911432/c-sharp-wpf-application-compiling-wm-powerbroadcast
+https://stackoverflow.com/questions/3355606/detect-laptop-lid-closure-and-opening/23327280#23327280
