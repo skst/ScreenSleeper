@@ -127,7 +127,7 @@ jobs:
       # BUG: `new_tag` has the 'v' even when WITH_V is false.
       # So, we remove it.
       - name: Substitute string
-        uses: bluwy/substitute-string-action@v2.0.1
+        uses: bluwy/substitute-string-action@v3.0.0
         id: TrimV
         with:
           _input-text: ${{ steps.StepTagNoV.outputs.new_tag }}
