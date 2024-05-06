@@ -1,20 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSTest.Sdk/3.3.1">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
-
-    <IsPackable>false</IsPackable>
-
-    <!-- Enable the MSTest runner, this is an opt-in feature -->
-    <EnableMSTestRunner>true</EnableMSTestRunner>
-    <!-- We need to produce an executable and not a DLL -->
-    <OutputType>Exe</OutputType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MSTest" Version="3.3.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ScreenSleeper\ScreenSleeper.csproj" />
