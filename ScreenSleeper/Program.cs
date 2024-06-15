@@ -21,8 +21,10 @@ public class Program
 {
 	static void Main(string[] args)
 	{
-		if (Application.IsRunning)
+		if (!Application.IsFirst)
+		{
 			return;
+		}
 
 		CommandLineArguments cmdline = new(args, caseSensitive: false);
 
