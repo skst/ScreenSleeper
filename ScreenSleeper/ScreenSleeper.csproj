@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -7,15 +7,15 @@
     <ApplicationIcon>monitor_screensaver.ico</ApplicationIcon>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <Company>12noon</Company>
-    <Copyright>(c) 2021-2023 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>(c) 2021-2024 12noon, Stefan K.S. Tucker</Copyright>
     <StartupObject />
     <Platforms>AnyCPU;x64</Platforms>
 	 <PackageReadmeFile>README.md</PackageReadmeFile>
 	 <RepositoryUrl>https://github.com/skst/ScreenSleeper</RepositoryUrl>
 	 <PackageLicenseFile>LICENSE</PackageLicenseFile>
-	 <AssemblyVersion>1.3.0</AssemblyVersion>
-	 <FileVersion>1.3.0.0</FileVersion>
-	 <Version>1.3.0</Version>
+	 <AssemblyVersion>1.3.1</AssemblyVersion>
+	 <FileVersion>1.3.1.0</FileVersion>
+	 <Version>1.3.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
