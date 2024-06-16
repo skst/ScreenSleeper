@@ -21,6 +21,11 @@ public class Program
 {
 	static void Main(string[] args)
 	{
+		if (!Application.IsFirst)
+		{
+			return;
+		}
+
 		CommandLineArguments cmdline = new(args, caseSensitive: false);
 
 		if ((cmdline["?"] is not null) || (cmdline["h"] is not null))
